@@ -4,6 +4,8 @@ import Settings from './components/Settings/Settings';
 import Countdown from './components/Countdown/Countdown';
 import ControlButtons from './components/ControlButtons/ControlButtons';
 
+import AudioPlay from './audiotest';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -13,12 +15,16 @@ class App extends React.Component {
       workInterval: 30,
       restInterval: 5
     }
+    this.notificationSound = new Audio('../public/chimes.wav');
     this.handleStart = this.handleStart.bind(this);
     this.handlePause = this.handlePause.bind(this);
     // this.handleReset = this.handleReset.bind(this);
     // this.countdownSeconds = this.countdownSeconds.bind(this);
     this.interval = 0;
   }
+
+  // // Audio
+  // const notificationSound = 
 
   // Press "Start" button
   handleStart() {
@@ -27,6 +33,7 @@ class App extends React.Component {
 
   // Press "Pause" button
   handlePause() {
+    console.log("Pressed pause");
     clearInterval(this.interval);
   }
 
@@ -34,12 +41,14 @@ class App extends React.Component {
   checkForStateChange() {
     if (this.state.seconds === 0 && this.state.rest === false) {
       console.log("End of work! Start rest");
+      this.notificationSound.play();
       this.setState({
         seconds: this.state.restInterval,
         rest: true
       });
     } else if (this.state.seconds === 0 && this.state.rest === true) {
       console.log("End of rest! Start work");
+      this.notificationSound.play();
       this.setState({
         seconds: this.state.workInterval,
         rest: false
@@ -64,6 +73,8 @@ class App extends React.Component {
         <Settings />    
         <Countdown seconds={this.state.seconds} rest={this.state.rest}/>
         <ControlButtons onClickStart={this.handleStart} onClickPause={this.handlePause}/>
+
+        < AudioPlay />
       </div>
     );
   }

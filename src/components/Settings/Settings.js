@@ -1,7 +1,8 @@
-function Settings() {
+function Settings(props) {
     return (
-        <p className="settings">
-            <input type="text" id="intervalTime" value="20" /> second intervals <input type="text" id="breakTime" value="10" /> seconds rest <button id="settings">Update</button>
+        <p>
+            <input type="text" value={props.workInterval}onChange={props.handleWork}/> second intervals 
+            <input type="text" value={props.restInterval} onChange={props.handleRest} /> seconds rest
         </p>
     )
 }

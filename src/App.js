@@ -4,8 +4,6 @@ import Settings from './components/Settings/Settings';
 import Countdown from './components/Countdown/Countdown';
 import ControlButtons from './components/ControlButtons/ControlButtons';
 
-import AudioPlay from './audiotest';
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -15,40 +13,58 @@ class App extends React.Component {
       workInterval: 30,
       restInterval: 5
     }
-    this.notificationSound = new Audio('../public/chimes.wav');
     this.handleStart = this.handleStart.bind(this);
     this.handlePause = this.handlePause.bind(this);
     // this.handleReset = this.handleReset.bind(this);
-    // this.countdownSeconds = this.countdownSeconds.bind(this);
-    this.interval = 0;
+
+    this.handleWorkChange = this.handleWorkChange.bind(this);
+    this.handleRestChange = this.handleRestChange.bind(this);
+
+    this.timer = 0;
   }
 
-  // // Audio
-  // const notificationSound = 
+  // Settings - handle work change
+  handleWorkChange(event) {
+    this.setState({ workInterval: event.target.value })
+  }
+
+  // Settings - handle rest change
+  handleRestChange(event) {
+    this.setState({ restInterval: event.target.value })
+  }
 
   // Press "Start" button
   handleStart() {
-    this.interval = setInterval(this.countdownSeconds.bind(this), 1000);
+    this.timer = setInterval(this.countdownSeconds.bind(this), 1000);
   }
 
   // Press "Pause" button
   handlePause() {
     console.log("Pressed pause");
-    clearInterval(this.interval);
+    clearInterval(this.timer);
+  }
+
+  // Play sound inserted by Audio component
+  playAudio() {
+    const audioEl = document.getElementsByClassName("audio-element")[0]
+    audioEl.play()
   }
 
   // Check for when seconds reach 0 and then switch state
   checkForStateChange() {
     if (this.state.seconds === 0 && this.state.rest === false) {
-      console.log("End of work! Start rest");
-      this.notificationSound.play();
+      // Make a noise
+      this.playAudio();
+      
+      // Change state to REST mode
       this.setState({
         seconds: this.state.restInterval,
         rest: true
       });
     } else if (this.state.seconds === 0 && this.state.rest === true) {
-      console.log("End of rest! Start work");
-      this.notificationSound.play();
+      // Make a noise
+      this.playAudio();
+      // Change state to WORK mode
       this.setState({
         seconds: this.state.workInterval,
         rest: false
@@ -64,17 +80,22 @@ class App extends React.Component {
     this.checkForStateChange();
   }
 
-
-
   render() {
     return (
       <div id="app">
         <h2>HIIT Timer</h2>
-        <Settings />    
+        <Settings 
+          workInterval={this.state.workInterval} 
+          restInterval={this.state.restInterval}
+          handleWork={this.handleWorkChange} 
+          handleRest={this.handleRestChange} 
+        />    
         <Countdown seconds={this.state.seconds} rest={this.state.rest}/>
         <ControlButtons onClickStart={this.handleStart} onClickPause={this.handlePause}/>
 
-        < AudioPlay />
+        <audio className="audio-element">
+          <source src="./chimes.wav" type="audio/wav"></source>
+        </audio>
       </div>
     );
   }

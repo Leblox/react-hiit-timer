@@ -35,6 +35,7 @@ class App extends React.Component {
 
   // Press "Start" button
   handleStart() {
+    this.playAudio();
     this.timer = setInterval(this.countdownSeconds.bind(this), 1000);
   }
 

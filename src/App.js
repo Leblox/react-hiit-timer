@@ -8,10 +8,11 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      seconds: 7,
       rest: false,
-      seconds: 9,
       workInterval: 30,
-      restInterval: 5
+      restInterval: 5,
+      isThereATimer: false
     }
     this.handleStart = this.handleStart.bind(this);
     this.handlePause = this.handlePause.bind(this);
@@ -20,7 +21,7 @@ class App extends React.Component {
     this.handleWorkChange = this.handleWorkChange.bind(this);
     this.handleRestChange = this.handleRestChange.bind(this);
 
-    this.timer = 0;
+    this.timer = false;
   }
 
   // Settings - handle work change
@@ -37,12 +38,15 @@ class App extends React.Component {
   handleStart() {
     this.playAudio();
     this.timer = setInterval(this.countdownSeconds.bind(this), 1000);
+    this.setState({ isThereATimer: true });
   }
 
   // Press "Pause" button
   handlePause() {
     console.log("Pressed pause");
     clearInterval(this.timer);
+    this.setState({ isThereATimer: false });
+    
   }
 
   // Play sound inserted by Audio component
@@ -83,20 +87,28 @@ class App extends React.Component {
 
   render() {
     return (
-      <div id="app">
-        <h2>HIIT Timer</h2>
-        <Settings 
-          workInterval={this.state.workInterval} 
-          restInterval={this.state.restInterval}
-          handleWork={this.handleWorkChange} 
-          handleRest={this.handleRestChange} 
-        />    
-        <Countdown seconds={this.state.seconds} rest={this.state.rest}/>
-        <ControlButtons onClickStart={this.handleStart} onClickPause={this.handlePause}/>
-
-        <audio className="audio-element">
-          <source src="./chimes.wav" type="audio/wav"></source>
-        </audio>
+      <div className="app">
+        <div className="app--container">
+          <h2>HIIT Timer</h2>
+          <Settings 
+            workInterval={this.state.workInterval} 
+            restInterval={this.state.restInterval}
+            handleWork={this.handleWorkChange} 
+            handleRest={this.handleRestChange} 
+          />    
+          <Countdown 
+            seconds={this.state.seconds} 
+            rest={this.state.rest}
+          />
+          <ControlButtons 
+            isThereATimer={this.state.isThereATimer}
+            onClickStart={this.handleStart} 
+            onClickPause={this.handlePause}
+          />
+          <audio className="audio-element">
+            <source src="./chimes.wav" type="audio/wav"></source>
+          </audio>
+        </div>
       </div>
     );
   }

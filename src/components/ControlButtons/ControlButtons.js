@@ -1,10 +1,16 @@
+import StartOrPauseButton from '../StartOrPauseButton/StartOrPauseButton';
+
 function ControlButtons(props) {
+
     return (
-        <p>
-            <button id="start" onClick={props.onClickStart}>Start</button>
-            <button id="pause" onClick={props.onClickPause}>Pause</button>
-            <button id="reset">Reset</button>
-        </p>
+        <div>
+            < StartOrPauseButton 
+            isThereATimer={props.isThereATimer}
+            onClickStart={props.onClickStart} 
+            onClickPause={props.onClickPause}
+            />
+            <button className="reset">Reset</button>
+        </div>
     )
 }
 

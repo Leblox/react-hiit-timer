@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# Very basic HIIT timer built in React
+
+It is a very simple HIIT timer and with a basic UI, as I wanted a usable product quickly.
+
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
